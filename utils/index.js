@@ -3,7 +3,6 @@ const JWT = require("jsonwebtoken");
 const config = require("config");
 
 const multer = require("multer");
-const { console } = require("inspector");
 
 const auth = (req, res, next) => {
   // Get The Token From The Requset Header
@@ -35,7 +34,7 @@ const auth = (req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/images/");
+    cb(null, "https://tawasol-server-nf3x.onrender.com/images/");
   },
   filename: (req, file, cb) => {
     cb(null, `${req.user.id}`);
