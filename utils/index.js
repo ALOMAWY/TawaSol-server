@@ -34,7 +34,7 @@ const auth = (req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "https://tawasol-server-nf3x.onrender.com/images");
+    cb(null, "public/images");
   },
   filename: (req, file, cb) => {
     cb(null, `${req.user.id}`);
