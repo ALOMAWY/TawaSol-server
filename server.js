@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 //  Google Auth
 app.use(
   session({
-    secret: process.env.GOOGLE_CLIENT_SECRET,
+    secret: "sessionSecret",
     resave: false,
     saveUninitialized: true,
   })

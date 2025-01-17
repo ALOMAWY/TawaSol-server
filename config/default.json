@@ -1,4 +1,5 @@
 {
   "mongoConnectionString": "mongodb+srv://alomawy_code:alomawy333@cluster0.udbev.mongodb.net/alomawy_code?retryWrites=true&w=majority&appName=Cluster0",
-  "jwtSecret": "jwtSecretToken"
+  "jwtSecret": "jwtSecretToken",
+  "sessionSecret": "sessionSecret"
 }
