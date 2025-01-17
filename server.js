@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 });
 
 //  Google Auth
-app.use(session({ secret: "sec-key", resave: false, saveUninitialized: true }));
+app.use(session({ secret:GOOGLE_CLIENT_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
