@@ -12,6 +12,8 @@ const passport = require("passport");
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
+const session = require("express-session");
+
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
@@ -28,7 +30,13 @@ app.get("/", (req, res) => {
 });
 
 //  Google Auth
-app.use(session({ secret:GOOGLE_CLIENT_SECRET, resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: GOOGLE_CLIENT_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
