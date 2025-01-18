@@ -46,7 +46,7 @@ passport.use(
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL:
-        "https://tawasol-server-nf3x.onrender.com/api/auth/google/callback",
+        "https://tawasol-server-fufp.onrender.com/api/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
