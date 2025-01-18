@@ -30,63 +30,26 @@ router.get(
     failureRedirect: "/",
   }),
   async (req, res) => {
+    const { id, name, email } = req.user._json; // Extract user info from Google profile
+
     try {
-      // Extract user information from Google profile
-      const { name, email, id } = req.user._json;
+      const { error, token } = await registerUser({
+        name,
+        email,
+        googleId: id, // Pass Google ID for linking accounts
+      });
 
-      console.log(req.user._json);
-
-      // Check if the user already exists in the DB
-      let user = await User.findOne({ email });
-
-      if (!user) {
-        // If user doesn't exist, create a new one
-        user = new User({
-          name,
-          email,
-          googleId: id, // Store Google ID to prevent duplicate registration
-        });
-
-        // Optionally, generate a JWT or handle login in another way
-        const payload = {
-          user: {
-            id: user.id,
-          },
-        };
-
-        JWT.sign(
-          payload,
-          config.get("jwtSecret"),
-          { expiresIn: "5d" },
-          (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-          }
-        );
-
-        // Save the new user to the DB
-        await user.save();
-      } else {
-        // User already exists
-        const payload = {
-          user: {
-            id: user.id,
-          },
-        };
-
-        JWT.sign(
-          payload,
-          config.get("jwtSecret"),
-          { expiresIn: "5d" },
-          (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-          }
-        );
+      if (error) {
+        console.error(error);
+        return res.redirect(`/error?message=${encodeURIComponent(error)}`);
       }
+
+      // Optionally store the JWT in cookies or return it
+      res.cookie("token", token, { httpOnly: true });
+      res.redirect("http://localhost:5173/home"); // Redirect on success
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.redirect(`/error?message=${encodeURIComponent("Server error")}`);
     }
   }
 );

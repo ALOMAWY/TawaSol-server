@@ -2,6 +2,10 @@ const JWT = require("jsonwebtoken");
 
 const config = require("config");
 
+const bcrypt = require("bcryptjs");
+
+const User = require("../models/User");
+
 const multer = require("multer");
 
 // Cloudinary
@@ -56,35 +60,51 @@ const storage = new CloudinaryStorage({
   },
 });
 
-// Cloudinary Use
-
-// Old Use
-
-// // const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "public/images/");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, `${req.user.id}`);
-//   },
-// });
-
-// Old Use
-
 const upload = multer({
   storage: storage,
-  // limits: { fileSize: 2 * 1024 * 1024 },
+  limits: { fileSize: 2 * 1024 * 1024 },
 }).single("file");
 
-// Old Use
+async function registerUser({ name, email, password, googleId }) {
+  try {
+    let user = await User.findOne({ email });
 
-// const upload = multer({
-//   storage: storage,
-//   limits: {
-//     fileSize: 2 * 1024 * 1024,
-//   },
-// }).single("file");
+    if (user) {
+      return { error: "User already exists", token: null, user };
+    }
 
-// Old Use
+    user = new User({
+      name,
+      email,
+      password,
+      googleId,
+    });
 
-module.exports = { auth, upload };
+    // If the password is provided, hash it
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    // Save the user
+    await user.save();
+
+    // Generate JWT
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    const token = JWT.sign(payload, config.get("jwtSecret"), {
+      expiresIn: "5d",
+    });
+
+    return { error: null, token, user };
+  } catch (err) {
+    console.error(err.message);
+    throw new Error("Server error");
+  }
+}
+
+module.exports = { auth, upload, registerUser };
