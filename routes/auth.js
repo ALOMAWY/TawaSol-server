@@ -25,11 +25,16 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
+  passport.authenticate("google", {
+    successRedirect: "http://localhost:5173",
+    failureRedirect: "/",
+  }),
   async (req, res) => {
     try {
       // Extract user information from Google profile
       const { name, email, id } = req.user._json;
+
+      console.log(req.user._json);
 
       // Check if the user already exists in the DB
       let user = await User.findOne({ email });
