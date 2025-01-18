@@ -30,13 +30,14 @@ router.get(
     failureRedirect: "/",
   }),
   async (req, res) => {
-    const { id, name, email } = req.user._json; // Extract user info from Google profile
+    const { id, name, email } = req.user._json; // Get user info from Google profile
 
     try {
-      const { error, token } = await registerUser({
+      // Call the helper function to register the user
+      const { error, token, user } = await registerUser({
         name,
         email,
-        googleId: id, // Pass Google ID for linking accounts
+        googleId: id, // Pass the Google ID
       });
 
       if (error) {
@@ -44,7 +45,7 @@ router.get(
         return res.redirect(`/error?message=${encodeURIComponent(error)}`);
       }
 
-      // Optionally store the JWT in cookies or return it
+      // Save the JWT in cookies or return it
       res.cookie("token", token, { httpOnly: true });
       res.redirect("http://localhost:5173/home"); // Redirect on success
     } catch (err) {
