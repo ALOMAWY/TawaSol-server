@@ -26,7 +26,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:5173",
+    successRedirect: "http://localhost:5173/home",
     failureRedirect: "/",
   }),
   async (req, res) => {
