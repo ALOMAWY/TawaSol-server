@@ -36,7 +36,7 @@ router.post(
   check(
     "password",
     "please chosse a password with at least 7 charecters"
-  ).isLength({ min: 7, max: 20 }),
+  ).isLength({ min: 7, max: 30 }),
   async (req, res) => {
     const errors = validationResult(req);
 

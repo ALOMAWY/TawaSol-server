@@ -67,29 +67,40 @@ const upload = multer({
 
 async function registerUser({ name, email, password, googleId }) {
   try {
+    // Check if the user already exists in the database
     let user = await User.findOne({ email });
 
     if (user) {
-      return { error: "User already exists", token: null, user };
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      const token = JWT.sign(payload, config.get("jwtSecret"), {
+        expiresIn: "5d",
+      });
+      return { error: null, token: token };
     }
 
+    // Create a new user
     user = new User({
-      name,
-      email,
-      password,
-      googleId,
+      name: name,
+      email: email,
+      password: password, // This will be empty for Google users
+      googleId: googleId, // Save the Google ID if they log in via Google
     });
 
-    // If the password is provided, hash it
+    // Hash the password only if provided (not for Google users)
     if (password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }
 
-    // Save the user
+    // Save the user to the database
     await user.save();
 
-    // Generate JWT
+    // Create a JWT token for the new user
     const payload = {
       user: {
         id: user.id,
@@ -100,7 +111,7 @@ async function registerUser({ name, email, password, googleId }) {
       expiresIn: "5d",
     });
 
-    return { error: null, token, user };
+    return { error: null, token, user }; // Return success
   } catch (err) {
     console.error(err.message);
     throw new Error("Server error");
