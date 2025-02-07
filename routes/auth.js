@@ -43,11 +43,11 @@ router.get(
 
       // Save the JWT in cookies or return it
       res.cookie("token", token, {
-        httpOnly: true, // Prevent JavaScript access for security
+        httpOnly: false, // Prevent JavaScript access for security
         // secure: process.env.NODE_ENV === "production", // Use secure cookies in production
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
-      res.redirect(`https://tawasol-vite-application.vercel.app`); // Redirect on success
+      res.redirect(`https://tawasol-vite-application.vercel.app/`); // Redirect on success
     } catch (err) {
       console.error(err.message);
       res.redirect(`/error?message=${encodeURIComponent("Server error")}`);
@@ -82,10 +82,10 @@ router.get(
       }
 
       res.cookie("token", token, {
-        httpOnly: true,
+        httpOnly: false,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      res.redirect(`https://tawasol-vite-application.vercel.app`); // Redirect on success
+      res.redirect(`https://tawasol-vite-application.vercel.app/`); // Redirect on success
     } catch (error) {
       console.error(error);
     }
