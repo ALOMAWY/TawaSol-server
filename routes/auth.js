@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", { scope: ["openid", "profile", "email"] })
 );
 
 // Google Callback Route
