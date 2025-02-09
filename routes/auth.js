@@ -21,11 +21,7 @@ router.get(
     failureRedirect: "/",
   }),
   async (req, res) => {
-    console.log("Google Profile Data:", req.user._json);
-
     const { id, name, email } = req.user._json; // Get user info from Google profile
-
-    console.log("Google Profile Data:", req.user._json);
 
     try {
       // Call the helper function to register the user
@@ -43,9 +39,10 @@ router.get(
 
       // Save the JWT in cookies or return it
       res.cookie("token", token, {
-        httpOnly: false, // Prevent JavaScript access for security
-        // secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "None",
+        secure: true,
       });
       res.redirect(`https://tawasol-vite-application.vercel.app/`); // Redirect on success
     } catch (err) {
