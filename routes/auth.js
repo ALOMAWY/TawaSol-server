@@ -85,9 +85,7 @@ router.get(
         httpOnly: false,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      res.redirect(
-        `https://tawasol-server-fufp.onrender.com/api/auth/facebook/callback`
-      );
+      res.redirect(`https://tawasol-vite-application.vercel.app/`);
     } catch (error) {
       console.error(error);
     }

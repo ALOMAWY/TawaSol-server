@@ -29,7 +29,7 @@ app.use(
 
 app.use(
   cors({
-    origin: "https://tawasol-vite-application.vercel.app/", // السماح للنطاق الأمامي
+    origin: "https://tawasol-vite-application.vercel.app", // السماح للنطاق الأمامي
     credentials: true, // تمكين الكوكيز عبر النطاقات
   })
 );
