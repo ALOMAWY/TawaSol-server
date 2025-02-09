@@ -82,8 +82,10 @@ router.get(
       }
 
       res.cookie("token", token, {
-        httpOnly: false,
+        httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "None",
+        secure: true,
       });
       res.redirect(`https://tawasol-vite-application.vercel.app/`);
     } catch (error) {
