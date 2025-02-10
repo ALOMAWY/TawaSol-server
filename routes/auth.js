@@ -106,7 +106,12 @@ router.get("/token", async (req, res) => {
 
 router.delete("/token", async (req, res) => {
   try {
-    res.clearCookie("token", { path: "/" }); // Specify the cookie name and path if needed
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
+    }); // Specify the cookie name and path if needed
     res.status(200).send("Cookie deleted and user logged out");
   } catch (error) {
     console.error("Cant Delete Token");
